@@ -4,506 +4,352 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <link rel="stylesheet" href="./css/main.css">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <style>
-        #header_home {
-            display: -webkit-box;
-        }
-
-        .flex1 {
-            -webkit-box-flex: 1
-        }
-
-        .flex2 {
-            -webkit-box-flex: 2
-        }
-
-        .flex3 {
-            -webkit-box-flex: 3
-        }
-
-        .flex4 {
-            -webkit-box-flex: 4
-        }
-
-        ul {
-            width: 100%;
-            list-style: none;
-            display: -webkit-box;
-            display: box;
-        }
-
-        .search-input {
-            margin-left: 7px;
+        /*
+            iscroll
+        */
+        #wrapper {
+            position: relative;
+            z-index: 1;
+            height: 35px;
             width: 90%;
-            height: 30px;
-            border: 0;
-            border-radius: 13px;
-            background: #0070B9;
-            /*去除系统默认的样式*/
-            -webkit-appearance: none;
-            outline: #ffffff;
+            overflow: hidden;
+
         }
-        .search-inputActive{
-           background-color: #013B62;
-        }
-        .search-advertise {
-            background-size: 26px;
+
+        #scroller {
             position: absolute;
-            left: 8px;
-            top: 11px;
-            width: 30px;
-            height: 30px;
-            background-image: url("./image/btn_search_bg.png");
-            background-repeat: no-repeat no-repeat;
+            z-index: 1;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            width: 200%;
+            /*-webkit-transform: translateZ(0);
+            transform: translateZ(0);*/
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-text-size-adjust: none;
         }
 
-        .add-package {
-            background-image: url("./image/btn_add_connection_normal.png");
-            background-repeat: no-repeat no-repeat;
-            background-position: center center;
+        #scroller ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: -webkit-box
         }
 
-        .add-publish {
-            background-image: url("./image/job_publish_select.png");
-            background-repeat: no-repeat no-repeat;
-            background-position: center center;
-            -webkit-background-size: 30px;
+        #scroller li {
+            width: 10%;
+            line-height: 35px;
+            font-size: 14px;
+            overflow: hidden;
+            text-align: center;
         }
 
-        .slider_status {
-            width: 240px;
-            height: 2px;
-            left: 71px;
-            top: 35 px;
-            position: absolute;
+        /*
+            iscroll
+        */
+        .nav_active {
+            color: #DC282E;
+            font-size: 16px !important;
         }
 
-        .slider_status span {
+        nav {
+            width: 100%;
+            display: -webkit-box;
+            background-color: #F6F6F6;
+        }
+
+        .arrow_down {
             display: block;
-            width: 73px;
-            height: 100%;
-            background-color: #FFFFFF;
-            -webkit-transition: 300ms;
+            background-size: 15px;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 15px;
+            background-image: url('image/channel_nav_arrow@2x.png');
+            -webkit-box-flex: 1;
+            -webkit-transform: rotate(180deg);
+            -webkit-transition: All .5s ease;
+        }
+
+        .arrow_up {
+            -webkit-transform: rotate(0deg);
+            -webkit-transition: All .5s ease;
+        }
+
+        .switchNav {
+            position: relative;
+            width: 90%;
+            line-height: 35px;
+            text-indent: 10px;
+        }
+
+        .navTips {
+            width: 70px;
+            height: 15px;
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+            font-size: 12px;
+            line-height: 16px;
+            color: #DE0000;
+            margin-top: 2px;
+            border: 1px solid;
+            border-radius: 10px;
+        }
+
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+        }
+
+        .login-user {
+            background-image: url("image/user_weiboimage_netease@2x.png") !important;
         }
     </style>
 </head>
-<body ontouchstart>
-<div id="main">
-    <!--header开始-->
-    <div id="header">
-        <input type="radio" name="headers" id="iheader_home" checked="true"/>
+<body tapmode="" onclick="clearFilter()">
+<header>
+    <div class=" header index-header">
+        <div class="btn menu" style="visibility: hidden" tapmode="" onclick="openMenu()"></div>
 
-        <div id="header_home">
-            <a id="back_home" tapmode="" onclick="openSearch()" class="search"></a>
-            <a tapmode="" onclick="slderbar('homeGroup',0)" id="checkSt" class="flex2" style="color: #ffffff;text-align: center">
-                实名动态
-            </a>
-            <a tapmode="" onclick="slderbar('homeGroup',1)" class="flex2" style="color: #ffffff;text-align: center">
-                匿名八卦
-            </a>
-
-            <a id="load_home" class="gossip" tapmode="" onclick="openScanner()"></a>
-
-            <div class="slider_status" id="slider_statust">
-                <span id="home_bar"></span>
-            </div>
+        <div class=" title">
+            <div class="btn logo " tapmode=""></div>
         </div>
-        <input type="radio" name="headers" id="iheader_jobs"/>
-
-        <div id="header_jobs" style="-webkit-box-orient:vertical;height:75px">
-            <ul class="flex1">
-                <li style="-webkit-box-flex:5;" onclick="opacity(this)">
-                    <input type="text" class="search-input" tapmode="search-inputActive" onclick="openSearch()"/>
-                    <span class="search-advertise" id="search-advertise1"></span>
-                </li>
-                <li style="width: 60px" class="add-publish" tapmode="" onclick="openPicture()">
-
-                </li>
-            </ul>
-            <ul style="background-color: #f0f0f0;height: 30px;line-height: 30px">
-                <li tapmode="" onclick="slderbar('jobsGroup',0)" class="flex2"
-                    style="color: #000;text-align: center;border-right: 1px solid #fff">
-                    看职位
-                </li>
-                <li tapmode="" onclick="slderbar('jobsGroup',1)" class="flex2" style="color: #000;text-align: center">
-                    招人才
-                </li>
-
-            </ul>
-
-        </div>
-        <input type="radio" name="headers" id="iheader_contacts"/>
-
-        <div id="header_contacts">
+        <div class="btn user" tapmode="" onclick="openUser()"></div>
+    </div>
+</header>
+<nav>
+    <div id="wrapper">
+        <div id="scroller">
             <ul>
-                <li style="-webkit-box-flex:5;" onclick="opacity(this)">
-                    <input type="text" class="search-input" tapmode="search-inputActive" onclick="openSearch()"/>
-                    <span class="search-advertise" id="search-advertise2"></span>
-                </li>
-                <li style="width: 60px" class="add-package" tapmode="" onclick="openContacts()">
-
-                </li>
+                <!--<li data-index=""  class="" tapmode="" onclick="openFrame(this)">2</li>
+                <li data-index=""  class="" tapmode="" onclick="openFrame(this)">1</li>
+                <li data-index=""  class="" tapmode="" onclick="openFrame(this)">3</li>-->
             </ul>
         </div>
-        <input type="radio" name="headers" id="iheader_myself"/>
-
-        <div id="header_myself" style="text-align: center">
-            <a tapmode="" onclick="slderbar('myselfGroup',0)" id="myCheckSt" class="flex2" style="color: #ffffff">
-                消息中心
-            </a>
-            <a tapmode="" onclick="slderbar('myselfGroup',1)" class="flex2" style="color: #ffffff">
-                个人设置
-            </a>
-
-            <div class="slider_status" style="left: 42px;" id="My_slider_status">
-                <span id="myself"></span>
-            </div>
-        </div>
     </div>
-    <!--header结束 -->
-    <!--content开始-->
-    <div id="content"></div>
-    <!--content结束-->
-    <!--footer开始-->
-    <div id="footer">
-        <form name="Menu">
-            <input type="radio" name="footers" id="ifooter_home" checked="true"/>
-            <a tapmode="homeActive" onclick="jumpFrame('home');">
-                <p class="home"></p>
-                <center>脉脉</center>
-            </a>
-            <input type="radio" name="footers" id="ifooter_jobs"/>
-            <a tapmode="jobsActive" onclick="jumpFrame('jobs');">
-                <p class="jobs"></p>
-                <center>人脉招聘</center>
-            </a>
-            <input type="radio" name="footers" id="ifooter_contacts"/>
-            <a tapmode="contactsActive" onclick="jumpFrame('contacts');">
-                <p class="contacts"></p>
-                <center>我的人脉</center>
-            </a>
-            <input type="radio" name="footers" id="ifooter_myself"/>
-            <a tapmode="myselfActive" onclick="jumpFrame('myself');">
-                <p class="myself"></p>
-                <center>个人中心</center>
-            </a>
-        </form>
+    <div class="switchNav hidden">切换栏目
+
     </div>
-    <!--footer结束 -->
+    <div class="arrow_down" onclick="openNav()" tapmode=""></div>
+</nav>
+<div class="cover hidden" tapmode="">
+
 </div>
-</body>
-<script src="./script/api.js"></script>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript" src="script/zepto.min.js"></script>
+<script type="text/javascript" src="script/iscroll.js"></script>
 <script>
-var curPageName; // !< 标记当前界面.
+    var myScroll, menuOpened = false;
+    function loaded() {
+        try {
+            myScroll = new IScroll('#wrapper', {
+                eventPassthrough: true,
+                scrollX: true,
+                scrollY: false,
+                preventDefault: false
+            });
+        } catch (e) {
+            alert(e)
+        }
+    }
+    apiready = function () {
+        $api.fixStatusBar($api.dom( ".header" ));
+        try {
+            checkUserId();
+            var model = api.require('model');
+            var query = api.require('query');
+            model.config({
+                appId: 'A6961750411369',
+                appKey: 'ABD8C546-8715-E13A-4025-4939457609E8',
+                host: 'https://d.apicloud.com'
+            });
+            api.showProgress();
+            query.createQuery(function (ret, err) {
+                if (ret && ret.qid) {
+                    var queryId = ret.qid;
+                    model.findAll({class: "nav", qid: queryId}, function (ret, err) {
+                        api.hideProgress();
+                        if (ret) {
+                            try {
+                                var navHtml = '', frames = [];
+                                for (var i in ret) {
+                                    var active = i == 0 ? 'nav_active' : '', frame = {};
+                                    navHtml += '<li data-index="' + i + '" id="' + ret[i].id + '" class="' + active + '" tapmode="" onclick="openFrame(this)">' + ret[i].name + '</li>';
+                                    frame.name = 'frame_' + i;
+                                    frame.url = i == 1 ? 'html/frm_hotSpot.html' : 'html/frm_topLine.html';
+                                    frame.pageParam = {id: ret[i].id,index:i};
+                                    frames.push(frame);
+                                }
+                                $("#scroller").find('ul').html(navHtml);
+                                loaded();
+                                openFrameGroup(frames);
+                            } catch (e) {
+                                alert(e)
+                            }
 
-function openPicture(){
-    api.getPicture({
-        sourceType:	'library',
-        encodingType:	'png',
-        mediaValue:	'pic',
-        destinationType:	'url',
-        allowEdit:	true,
-        quality:	50,
-        targetWidth:100,
-        targetHeight:100,
-        saveToPhotoAlbum:	false
-    },	function(ret,	err){
-        if	(ret)	{
-            api.alert({msg:(ret.data+'时长'+ret.duration+'s')});
-        }	else{
-            api.alert({msg:err.msg});
-        };
-    });
-}
+                        } else {
+                            api.toast({msg: err.msg, location: 'middle'})
+                        }
+                    });
+                }
+            });
+            fixIos7Bar($(".header"));
 
+        } catch (e) {
+            alert(e)
+        }
 
-function openScanner(){
-    var obj = api.require('scanner');
-    obj.open(function(ret,err) {
-        api.alert({
-            title: '扫描结果',
-            msg: ret.msg
+    };
+
+    function checkUserId() {
+        if (localStorage.getItem('userId')) {
+            $(".user").addClass('login-user');
+        } else {
+            $(".user").removeClass('login-user');
+        }
+    }
+
+    function openFrame(obj) {
+        try {
+            api.setFrameGroupIndex({
+                name: 'group',
+                index: $(obj).data('index'),
+                scroll: true
+            });
+        } catch (e) {
+            alert(e)
+        }
+
+    }
+
+    function openFrameGroup(frames) {
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: true,
+            rect: {x: 0, y: $("header").height() + $("nav").height(), w: 'auto', h: 'auto'},
+            index: 0,
+            frames: frames
+        }, function (ret, err) {
+            if (ret.index >= 4) {
+                myScroll.scrollTo(-$("li").width() * (ret.index - 4), 0, 1000);
+            }
+            $("#scroller").find('li').removeClass('nav_active').eq(ret.index).addClass('nav_active');
         });
-    });
-}
-
-function openContacts(){
-    api.openContacts(
-        function(ret,err){
-            if(ret.status){
-                var	msg	=	'姓名:'+ret.name+'--电话:'+ret.phone;
-                api.alert({msg:msg});
-            }else{
-                api.alert({msg:err.msg});
-            };
-        }
-    );
-}
-
-function openHomeFrameGroup(num) {
-	if("home" === curPageName){
-		return;
-	}
-	
-	curPageName = "home";
-	
-		api.execScript({"frameName": "contacts", "script":"closeSelf();"});
-	
-    var width=parseInt(window.getComputedStyle($api.byId("checkSt"),null).width);
-    $api.byId('slider_statust').style.left=50+(width*0.2)+"px";	
-	$api.byId('slider_statust').style.top=($api.byId('header').offsetHeight-10)+"px";
-    var s = window.getComputedStyle($api.byId('content'), null);
-    var height = parseInt(s.height);
-    api.setFrameGroupAttr({name: 'jobsGroup', hidden: true});
-    api.setFrameGroupAttr({name: 'myselfGroup', hidden: true});
-    api.setFrameAttr({name: 'contacts', hidden: true});
-	
-    api.openFrameGroup({
-        name: 'homeGroup',
-        background: '#FFF',
-        rect: {x: 0, y: $api.byId('header').offsetHeight, w: s.width, h: height},
-        index: num,
-        frames: [
-            {
-                name: 'dynamic',
-                url: './html/main_dynamic.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#fff'
-            },
-            {
-                name: 'anon',
-                url: './html/main_anon.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#FFF'
-            }
-        ]
-    }, function (ret) {
-        if (ret.index == 0) {
-            api.execScript({
-                name: api.winName,
-                script: 'slderbarCallback("home_bar",0,"checkSt")'
-            })
-        } else if (ret.index == 1) {
-            api.execScript({
-                name: api.winName,
-                script: 'slderbarCallback("home_bar",100,"checkSt")'
-            })
-        }
-    });
-    api.setFrameGroupAttr({name: 'homeGroup', hidden: false});
-}
-
-function openJobsFrameGroup(num) {
-	if("jobs" === curPageName){
-		return;
-	}
-	
-	curPageName = "jobs";
-	
-	api.execScript({"frameName": "contacts", "script":"closeSelf();"});
-	
-    var s = window.getComputedStyle($api.byId('content'), null);
-    var height = parseInt(s.height);
-    api.setFrameGroupAttr({name: 'homeGroup', hidden: true});
-    api.setFrameGroupAttr({name: 'myselfGroup', hidden: true});
-    api.setFrameAttr({name: 'contacts', hidden: true});
-    api.openFrameGroup({
-        name: 'jobsGroup',
-        background: '#FFF',
-        rect: {x: 0, y: $api.byId('header').offsetHeight, w: s.width, h: height},
-        index: num,
-        frames: [
-            {
-                name: 'position',
-                url: './html/jobs_position.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#fff'
-            },
-            {
-                name: 'talent',
-                url: './html/jobs_talent.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#FFF'
-            }
-        ]
-    }, function (ret) {
-
-    });
-    api.setFrameGroupAttr({name: 'jobsGroup', hidden: false});
-}
-
-function openMyselfFrameGroup(num) {
-	if("self" === curPageName){
-		return;
-	}
-	
-	curPageName = "self";
-	
-		api.execScript({"frameName": "contacts", "script":"closeSelf();"});
-		
-    var width=parseInt(window.getComputedStyle($api.byId("myCheckSt"),null).width);
-    $api.byId('My_slider_status').style.left=(width*0.3-5)+"px";	
-	$api.byId('My_slider_status').style.top=($api.byId('header').offsetHeight-10)+"px";
-    var s = window.getComputedStyle($api.byId('content'), null);
-    var height = parseInt(s.height);
-    api.setFrameGroupAttr({name: 'homeGroup', hidden: true});
-    api.setFrameGroupAttr({name: 'jobsGroup', hidden: true});
-    api.setFrameAttr({name: 'contacts', hidden: true});
-    api.openFrameGroup({
-        name: 'myselfGroup',
-        background: '#FFF',
-        rect: {x: 0, y: $api.byId('header').offsetHeight, w: s.width, h: height},
-        index: num,
-        frames: [
-            {
-                name: 'message',
-                url: './html/messageCenter.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#fff'
-            },
-            {
-                name: 'setting',
-                url: './html/mySetting.html',
-                bounces: true,
-                opaque: true,
-                bgColor: '#FFF'
-            }
-        ]
-    }, function (ret) {
-        if (ret.index == 0) {
-            api.execScript({
-                name: api.winName,
-                script: 'slderbarCallback("myself",0,"myCheckSt")'
-            })
-        } else if (ret.index == 1) {
-            api.execScript({
-                name: api.winName,
-                script: 'slderbarCallback("myself",162,"myCheckSt")'
-            })
-        }
-    });
-    api.setFrameGroupAttr({name: 'myselfGroup', hidden: false});
-}
-
-function openContactsFrame() {
-	if("contact" === curPageName){
-		return;
-	}
-	
-	curPageName = "contact";
-	
-    var s = window.getComputedStyle($api.byId('content'), null);
-    api.setFrameGroupAttr({name: 'jobsGroup', hidden: true});
-    api.setFrameGroupAttr({name: 'myselfGroup', hidden: true});
-    api.setFrameGroupAttr({name: 'homeGroup', hidden: true});
-	api.closeFrame({"name": "contacts"});
-    api.openFrame({
-        name: "contacts",
-        bounces: true,
-        url: './html/main_contacts.html',
-        bgColor: "#ffffff",
-        rect: {
-            x: 0,
-            y: $api.byId('header').offsetHeight,
-            w: parseInt(s.width),
-            h: parseInt(s.height)
-        }
-    });
-    api.setFrameAttr({name: 'contacts', hidden: false});
-}
-
-function radioSelect(id) {
-    var ret = 0;
-    var e = $api.byId(id);
-    if (e && !e.checked) {
-        e.checked = true;
-        ret = 1;
-    }
-    return ret;
-}
-
-
-function jumpFrame(url) {
-    try{
-        radioSelect('ifooter_' + url);
-        radioSelect('iheader_' + url);
-        if (url == 'home') {
-            openHomeFrameGroup(0);
-        } else if (url == 'jobs') {
-            openJobsFrameGroup(0);
-        } else if (url == 'myself') {
-            openMyselfFrameGroup(0);
-        } else if (url == 'contacts') {
-            openContactsFrame();
-        }
-    }catch(e){
-        alert(e)
     }
 
-}
 
-function slderbar(groupName,index) {
-    api.setFrameGroupIndex({
-        name:groupName,
-        index:index,
-        scroll:true
-    });
-}
-
-function slderbarCallback(id, num,barId) {
-    var width=parseInt(window.getComputedStyle($api.byId(barId),null).width);
-    if(num!=0){
-        num=width;
-    }
-    $api.css($api.byId(id),
-       "-webkit-transform:translate(" + num + "px,0)"
-    );
-}
-
-function openSearch() {
-    api.openWin({
-        name: 'search',
-        url: './html/search.html',
-        bounces: false,
-        opaque: false,
-        animation: {
-            type: "movein",
-            subType: "from_bottom",
-            duration: 300
+    function openNav() {
+        var $arrow_down = $('.arrow_down');
+        if ($arrow_down.hasClass('arrow_up')) {
+            $arrow_down.removeClass('arrow_up');
+            $(".switchNav").addClass('hidden');
+            $("#wrapper").removeClass('hidden');
+            _closeNav()
+        } else {
+            $(".switchNav").removeClass('hidden');
+            $("#wrapper").addClass('hidden');
+            $arrow_down.addClass('arrow_up');
+            _openNav();
         }
-    });
-}
-apiready = function () {
-    var header = $api.byId('header');
-	(function(el){
-	        var strDM = api.systemType;
-	        if (strDM == 'ios') {
-	            var strSV = api.systemVersion;
-	            var numSV = parseInt(strSV,10);   
-	            var fullScreen = api.fullScreen;
-	            var iOS7StatusBarAppearance = api.iOS7StatusBarAppearance;
-	            if (numSV >= 7 && !fullScreen && iOS7StatusBarAppearance) {
-	                el.style.paddingTop = '20px';
-					
-					/*搜索图标单独处理.*/
-					$api.byId('search-advertise1').style.top = "31px";
-					$api.byId('search-advertise2').style.top = "31px";
-	            }
-	        }   
-	    })(header);
-	
-    api.addEventListener({name: 'keyback'}, function(ret, err){
-        api.closeWidget();
-    });
+    }
 
-    jumpFrame('home');
-};
+    function _openNav() {
+        api.openFrame({
+            name: 'frm_nav',
+            url: 'html/frm_nav.html',
+            rect: {
+                x: 0,
+                y: $("header").height() + $("nav").height(),
+                w: $("body").width(),
+                h: 'auto'
+            },
+            bounces: false
+        });
 
+    }
+
+    function _closeNav() {
+        api.closeFrame({
+            name: 'frm_nav'
+        });
+        api.closeFrame({
+            name: 'frm_more_nav'
+        })
+    }
+
+    function openMenu() {
+        if ($('.arrow_down').hasClass('arrow_up')) {
+            $('.arrow_down').removeClass('arrow_up');
+            $(".switchNav").addClass('hidden');
+            $("#wrapper").removeClass('hidden');
+            _closeNav()
+        } else {
+            /*if (!menuOpened) {
+                api.openFrame({
+                    name: 'menu',
+                    url: 'html/frm_menu.html',
+                    bounces: false,
+                    rect: {
+                        x: -($("body").width()),// -($("body").width() * .25),
+                        y: 0,
+                        w: $("body").width(),
+                        h: $("body").height()
+                    }
+                });
+                menuOpened = true;
+            }*/
+            //_animation(api.winWidth * 0.75, addFilter);
+        }
+    }
+
+    function addFilter() {
+        $(".cover").removeClass('hidden');
+        $("body").addClass('filter');
+        api.execScript({frameName: 'topLine', script: 'addFilter()'});
+    }
+
+    function _animation(x, callBack) {
+        api.animation({
+            name: 'menu',
+            duration: 200,
+            curve: 'easeIn',
+            translation: {
+                x: x,
+                y: 0,
+                z: 0
+            }
+        }, function () {
+            if (callBack) {
+                callBack();
+            }
+        });
+    }
+
+    function closeMenu() {
+        _animation(-api.winWidth * 0.75, function () {
+            api.execScript({frameName: 'topLine', script: '_clearFilter()'});
+            $("body").removeClass('filter');
+            $(".cover").addClass('hidden');
+        });
+    }
+    function openUser() {
+        api.openWin({
+            name: 'user',
+            url: 'html/win_user.html'
+        })
+    }
+    function clearFilter() {
+        if ($("body").hasClass('filter')) {
+            closeMenu();
+        }
+    }
 </script>
+</body>
 </html>
